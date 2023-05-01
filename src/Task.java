@@ -1,11 +1,15 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class Task {
+public class Task implements Comparable<Task>{
     int robots = 0; //current robots assigned to the task
     int row;
     int col;
 
-    ArrayList<Integer> bids = new ArrayList<Integer>(); //will be used to choose best bid
+    ArrayList<Bid> bids = new ArrayList<>(); //will be used to store bids
+    int bestMatch;
+    int bestMatchValue;
+
 
     int assigned(){ //returns # of assigned robots
         return robots;
@@ -19,10 +23,46 @@ public class Task {
             System.out.println("Error: Task already assigned max robots.");
         }
     }
+
+    void addBid(Bid bid){ //adds bid to list
+        bids.add(bid);
+    }
+
+    void sortBids()
+    {
+        Collections.sort(bids); //sorts the bids by value increasing
+        setBestMatch(bids.get(0).id); //assigns best match for sorting later
+        setBestMatchValue(bids.get(0).number); //assigns best match value for sorting later
+    }
+    int bidWinner(int place){ //takes in the place value wanted
+        int winner;
+        if(bids.size() == 0){
+            System.out.println("Error: there are no bids stored.");
+            winner = -1;
+        }
+        else{
+            winner = bids.get(place).id;
+        }
+        return winner;
+    }
     void setRow(int y){
+
         row = y;
     }
     void setCol(int x){
+
         col = x;
     }
+    void setBestMatch(int value){
+        bestMatch = value;
+    }
+    void setBestMatchValue(int value){
+        bestMatchValue = value;
+    }
+
+    @Override public int compareTo(Task compareWinner) { //do not touch handles sorting tasks by their best bid
+        int compareNum = ((Task)compareWinner).bestMatchValue;
+        return this.bestMatchValue - compareNum;
+    }
+
 }
