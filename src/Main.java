@@ -13,23 +13,21 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //taking user input is placeholder
-        //would like to ask for cycles through JPanel input
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter the amount of cycles to display: ");
-        int cycles = scan.nextInt(); //amount of cycles to demo for
+        int cycles = 10; //amount of cycles to demo for
         int cyclesCounter = 0;
         boolean check = true;
+        JFrame grid = new JFrame();
+        PathGenerator path = new PathGenerator();
 
         int[] initialPositions = generateInitialEnvironment();
         char[][] initialGrid = generateGrid(initialPositions);
-        displayGrid(initialGrid);
+        displayGrid(initialGrid, grid);
 
         while(cyclesCounter < cycles){ //will iterate for determined amount of cycles
             for(int i = 0; i < robots.size(); i++){//robots should view list of tasks and pick one
                 if((robots.get(i).hasTask == false) && (tasks.size() > 0)){//verifies robot is not assigned task and there are tasks to assign
                     for(int j = 0; j < tasks.size(); j++){
-                        if(tasks.get(j).assigned() < 2){
+                        if(tasks.get(j).assigned() < 2 && (tasks.get(j).needsRemoval == false)){
                             int robotBid = robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(j).row, tasks.get(j).col);
                             Bid bid = new Bid(robotBid, i);
                             System.out.printf("Current Robot location y- %d x- %d and current task location y- %d x- %d\n", robots.get(i).row, robots.get(i).col, tasks.get(j).row, tasks.get(j).col);
@@ -56,13 +54,39 @@ public class Main {
                     }
                 }
             }
-            cyclesCounter += 1;
-            //prioritize each task having a robot
-            //if there are more robots than tasks, allow teamwork
-            //for each robot go through each available task (priortize 0 robot tasks first)
-            //for each robot go through each available task (not maxed out tasks next)
-            //generate bid for that task
-            //function will go through bids and best bid(robot) is selected
+            //code above here works properly
+            //now that robots are assigned their tasks
+            //handle the robots setting the path to their tasks and then handling the task once they get there
+            //JPanel should update to show movement
+            //10 moves can be made in a cycle
+            //a full cycle to clean up for 1 robot
+            //half the amount of time left if another robot shows up
+            //Every 10 cycles more trash will added
+
+            for(int i = 0; i < tasks.size(); i++){ //will go through each task to make sure it does not need to be removed (added)
+                if(tasks.get(i).needsRemoval){
+                    tasks.remove(i);
+                }
+            }
+
+            for(int i = 0; i < robots.size(); i++){ //goes thru eat robot and calculates next point if not at the task
+                if(robots.get(i).hasTask && robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(robots.get(i).task).row, tasks.get(robots.get(i).task).col) > 1){
+                    int[] start = {robots.get(i).row, robots.get(i).col};
+                    int[] end = {tasks.get(robots.get(i).task).row, tasks.get(robots.get(i).task).col};
+                    LinkedList<PathGenerator.Cell> shortest = new LinkedList<>(); //will store the shortest path
+                    shortest = path.shortestPath(initialGrid, start, end ); //returns the shortest path to the goal
+                    robots.get(i).setRow(shortest.get(1).x); //sets the new row for the robot
+                    robots.get(i).setCol(shortest.get(1).y); //sets the new col for the robot
+
+                }
+                if(robots.get(i).hasTask && robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(robots.get(i).task).row, tasks.get(robots.get(i).task).col) == 1 &&  tasks.get(robots.get(i).task).assigned() == 1){
+                    //start doing task or keep doing task 1 robot
+                }
+                if(robots.get(i).hasTask && robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(robots.get(i).task).row, tasks.get(robots.get(i).task).col) == 1 &&  tasks.get(robots.get(i).task).assigned() == 2){
+                    //start doing task or keep doing task 2 robots
+                }
+            }
+           cyclesCounter += 1;
         }
 
     }
@@ -131,8 +155,7 @@ public class Main {
         return result;
     }
 
-    public static void displayGrid(char[][] initialGrid){
-        JFrame grid = new JFrame();
+    public static void displayGrid(char[][] initialGrid, JFrame grid){
         grid.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         grid.setLayout(new GridLayout(10,10));
         grid.setSize(700,700);
@@ -156,4 +179,39 @@ public class Main {
             }
         }
     }
+
+//    public static void updateGrid(JFrame grid, ArrayList<Robot> robots, ArrayList<Task> tasks){
+//        JLabel[][] cells;
+//        cells = new JLabel[10][10];
+//        char[][] result = new char[10][10]; //creates environment for display
+//        for(int i = 0; i < 10; i++)
+//        {
+//            Arrays.fill(result[i], '-');
+//        }
+//
+//        for(int i = 0; i < robots.size(); i++){
+//            result[robots.get(i).col][robots.get(i).row] = 'R';
+//        }
+//        for(int i = 0; i < tasks.size(); i++){
+//            result[tasks.get(i).col][tasks.get(i).row] = 'G';
+//        }
+//
+//        for (int i = 0; i < 10; i++) {
+//            for (int j = 0; j < cells.length; j++) {
+//                cells[i][j] = new JLabel(" " + result[i][j] + " ", SwingConstants.CENTER);
+//                cells[i][j].setOpaque(true);
+//                if((cells[i][j].getText().compareTo(" R ")) == 0){
+//                    cells[i][j].setBackground(Color.pink);
+//                } else if((cells[i][j].getText().compareTo(" G ")) == 0) {
+//                    cells[i][j].setBackground(Color.green);
+//                } else{
+//                    cells[i][j].setBackground(Color.white);
+//                }
+//                cells[i][j].setBorder(BorderFactory.createLineBorder(Color.black, 1));
+//                //grid.add(cells[i][j]);
+//            }
+//        }
+//        grid.revalidate();
+//        grid.repaint();
+//    }
 }
