@@ -10,6 +10,10 @@ public class Task implements Comparable<Task>{
     int bestMatch;
     int bestMatchValue;
 
+    int time = 10;
+
+    int id;
+
 
     int assigned(){ //returns # of assigned robots
         return robots;
@@ -53,6 +57,10 @@ public class Task implements Comparable<Task>{
 
         col = x;
     }
+    void setTime(int value){
+        time = value;
+
+    }
     void setBestMatch(int value){
         bestMatch = value;
     }
@@ -63,6 +71,11 @@ public class Task implements Comparable<Task>{
     @Override public int compareTo(Task compareWinner) { //do not touch handles sorting tasks by their best bid
         int compareNum = ((Task)compareWinner).bestMatchValue;
         return this.bestMatchValue - compareNum;
+    }
+
+    void setId(int value)
+    {
+        id = value;
     }
 
 }
