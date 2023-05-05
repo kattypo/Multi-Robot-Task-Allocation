@@ -5,7 +5,7 @@ public class PathGenerator {
         int x;
         int y;
         int dist;  	//distance
-        Cell prev;  //parent cell in the path
+        Cell prev;
         Cell(int x, int y, int dist, Cell prev) {
             this.x = x;
             this.y = y;
@@ -18,7 +18,7 @@ public class PathGenerator {
             return "(" + x + "," + y + ")";
         }
     }
-    //BFS, Time O(n^2), Space O(n^2)
+
     public static LinkedList<Cell> shortestPath(char[][] matrix, int[] start, int[] end) {
         int sx = start[0], sy = start[1];
         int dx = end[0], dy = end[1];
@@ -58,28 +58,14 @@ public class PathGenerator {
             //moving right
             visit(cells, queue, p.x, p.y + 1, p);
         }
-
-        //compose the path if path exists
-//        if (dest == null) {
-//            System.out.println("there is no path.");
-//            return;
-//        } else {
             LinkedList<Cell> path = new LinkedList<>();
             p = dest;
             do {
                 path.addFirst(p);
             } while ((p = p.prev) != null);
-//            System.out.println(path);
-//            for(int i = 0; i < path.size(); i++){
-//                System.out.println(path.get(i));
-//            }
             return path;
-//        }
     }
-
-    //function to update cell visiting status, Time O(1), Space O(1)
     private static void visit(Cell[][] cells, LinkedList<Cell> queue, int x, int y, Cell parent) {
-        //out of boundary
         if (x < 0 || x >= cells.length || y < 0 || y >= cells[0].length || cells[x][y] == null) {
             return;
         }
@@ -93,3 +79,4 @@ public class PathGenerator {
         }
     }
 }
+
