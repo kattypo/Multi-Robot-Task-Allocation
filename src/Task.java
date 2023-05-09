@@ -10,7 +10,7 @@ public class Task implements Comparable<Task>{
     int bestMatch;
     int bestMatchValue;
 
-    int time = 10;
+    int time = 2;
 
     int id;
 
