@@ -31,7 +31,7 @@ public class PathGenerator {
                 if (matrix[i][j] == '-') {
                     cells[i][j] = new Cell(i, j, Integer.MAX_VALUE, null);
                 }
-                if (((i == sx && j == sy)|| (i == dx && j == dy)) && (matrix[i][j] == 'R') || ((i == sx && j == sy)|| (i == dx && j == dy)) && (matrix[i][j] == 'G')) {
+                if ((((i == sx && j == sy)|| (i == dx && j == dy)) && (matrix[i][j] == 'R')) || (((i == sx && j == sy)|| (i == dx && j == dy)) && (matrix[i][j] == 'G')) || (((i == sx && j == sy)|| (i == dx && j == dy)) && (matrix[i][j] == '.'))) {
                     cells[i][j] = new Cell(i, j, Integer.MAX_VALUE, null);
                 }
             }
@@ -79,4 +79,3 @@ public class PathGenerator {
         }
     }
 }
-
