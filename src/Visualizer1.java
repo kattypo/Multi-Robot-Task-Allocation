@@ -60,15 +60,12 @@ public abstract class Visualizer1 implements ActionListener {
                     }
 
                     for(int i = 0; i < robots.size(); i++){ //goes through eat robot and calculates next point if not at the task
-                        System.out.printf("Robot %d - cycle %d\n", i, cyclesCounter);
                         if((robots.get(i).hasTask)) {
                             if((robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(findTask(robots.get(i).task)).row, tasks.get(findTask(robots.get(i).task)).col) > 1)){
-                                System.out.printf("Robot %d - cycle %d - option 1\n", i, cyclesCounter);
                                 int[] start = {robots.get(i).col, robots.get(i).row};
                                 int[] end = {tasks.get(findTask(robots.get(i).task)).col, tasks.get(findTask(robots.get(i).task)).row};
                                 LinkedList<PathGenerator.Cell> shortest = new LinkedList<>(); //will store the shortest path
                                 shortest = path.shortestPath(initialGrid, start, end); //returns the shortest path to the goal
-                                System.out.println(shortest);
                                 duplicate = false;
                                 for (int j = 0; j < robots.size(); j++) {
                                     if (((shortest.get(1).x) == (robots.get(j).col)) && ((shortest.get(1).y) == (robots.get(j).row)) && (i != j)) {
@@ -84,8 +81,6 @@ public abstract class Visualizer1 implements ActionListener {
                             }
                             else if((robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(findTask(robots.get(i).task)).row, tasks.get(findTask(robots.get(i).task)).col) == 1)){
                                 //start doing task or keep doing task 1 robot
-                                System.out.printf("Robot %d - cycle %d - option 2\n", i, cyclesCounter);
-                                System.out.println(tasks.get(findTask(robots.get(i).task)).time);
 
                                 if(tasks.get(findTask(robots.get(i).task)).time > 0){
                                     int value = tasks.get(findTask(robots.get(i).task)).time - 1;
@@ -118,15 +113,15 @@ public abstract class Visualizer1 implements ActionListener {
         //don't do number repeats and positions should be between 0-99
         //return positions of those members for calculations later
         //the first 5 numbers are the robots and the last four are the garbage
-        int robots = 5;
-        int garbage = 4;
+        int robots = 20;
+        int garbage = 40;
         int[] positions = new int[robots + garbage];
         int testValue;
         Random random = new Random();
         for(int i = 0; i < positions.length; i++) { //generates random positions
             boolean duplicate = false;
             do {
-                testValue = random.nextInt(((100) - 1) - 0) + 0;
+                testValue = random.nextInt(((2500) - 1) - 0) + 0;
                 duplicate = false;
                 for (int j = 0; j < i; j++) {
                     if (positions[j] == testValue) {
@@ -142,16 +137,15 @@ public abstract class Visualizer1 implements ActionListener {
     }
     public static char[][] generateGrid(int[] positions) //creates grid
     {
-        //first 5 positions are robots, the rest is garbage piles
-        char[][] result = new char[10][10]; //creates environment for display
-        for(int i = 0; i < 10; i++)
+        char[][] result = new char[50][50]; //creates environment for display
+        for(int i = 0; i < 50; i++)
         {
             Arrays.fill(result[i], '-');
         }
-        for(int i = 0; i < 5; i++) //fills the robots positions
+        for(int i = 0; i < 20; i++) //fills the robots positions
         {
-            int row = positions[i] / 10;
-            int column = positions[i] % 10;
+            int row = positions[i] / 50;
+            int column = positions[i] % 50;
 
             result[row][column] = 'R';
             Robot robot = new Robot();
@@ -160,10 +154,10 @@ public abstract class Visualizer1 implements ActionListener {
             robot.setID(i);
             robots.add(robot);
         }
-        for(int i = 5; i < positions.length; i++) //fills the garbage/rubble positions
+        for(int i = 20; i < positions.length; i++) //fills the garbage/rubble positions
         {
-            int row = positions[i] / 10;
-            int column = positions[i] % 10;
+            int row = positions[i] / 50;
+            int column = positions[i] % 50;
 
             result[row][column] = 'G';
             Task task = new Task();
@@ -181,13 +175,13 @@ public abstract class Visualizer1 implements ActionListener {
 
     public static void displayGrid(char[][] initialGrid, JFrame grid, JButton button){
         top.setBackground(Color.gray);
-        bottom.setLayout(new GridLayout(10,10));
+        bottom.setLayout(new GridLayout(50,50));
         bottom.setSize(800,800);
         top.add(button);
 
         JLabel[][] cells;
-        cells = new JLabel[10][10];
-        for (int i = 0; i < 10; i++) {
+        cells = new JLabel[50][50];
+        for (int i = 0; i < 50; i++) {
             for (int j = 0; j < cells.length; j++) {
                 cells[i][j] = new JLabel(" " + initialGrid[i][j] + " ", SwingConstants.CENTER);
                 cells[i][j].setOpaque(true);
@@ -209,17 +203,17 @@ public abstract class Visualizer1 implements ActionListener {
         grid.getContentPane() .add(BorderLayout.SOUTH, bottom);
 
         grid.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        grid.setLayout(new GridLayout(2,10));
+        grid.setLayout(new GridLayout(2,50));
         grid.setSize(900,900);
         grid.setVisible(true);
     }
 
     public static void updateGrid(){
         JLabel[][] cells;
-        cells = new JLabel[10][10];
-        char[][] result = new char[10][10]; //creates environment for display
+        cells = new JLabel[50][50];
+        char[][] result = new char[50][50]; //creates environment for display
         bottom.removeAll();
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 50; i++)
         {
             Arrays.fill(result[i], '-');
         }
@@ -230,10 +224,9 @@ public abstract class Visualizer1 implements ActionListener {
         }
         for(int j = 0; j < robots.size(); j++){
             result[robots.get(j).row][robots.get(j).col] = 'R';
-            System.out.printf("Row-%d Col-%d\n", robots.get(j).row, robots.get(j).col);
 
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             for (int j = 0; j < cells.length; j++) {
                 cells[i][j] = new JLabel(" " + result[i][j] + " ", SwingConstants.CENTER);
                 cells[i][j].setOpaque(true);
