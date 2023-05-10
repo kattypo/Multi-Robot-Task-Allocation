@@ -8,7 +8,7 @@ public class Bid implements Comparable<Bid> {
     }
 
     @Override public int compareTo(Bid compareBid) { //do not touch handles sorting bid values
-        int compareNum = ((Bid)compareBid).number;
+        int compareNum = compareBid.number;
         return this.number - compareNum;
     }
 }
