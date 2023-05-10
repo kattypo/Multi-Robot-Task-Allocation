@@ -8,7 +8,7 @@ public abstract class Main  {
 
     public static void main(String[] args) {
 
-        System.out.printf("Choose a option\n Option 1: demo with no obstacles\n Option 2: demo with obstacles\n");
+        System.out.print("Choose a option\n Option 1: demo with no obstacles\n Option 2: demo with obstacles\n");
         Scanner scanner = new Scanner(System.in);
         int option = scanner.nextInt();
         if (option == 1) {
