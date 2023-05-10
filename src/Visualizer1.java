@@ -33,7 +33,7 @@ public abstract class Visualizer1 implements ActionListener {
                 boolean duplicate = false;
                 while(cyclesCounter < cycles){ //will iterate for determined amount of cycles
                     for(int i = 0; i < robots.size(); i++){//robots should view list of tasks and pick one
-                        if((robots.get(i).hasTask == false) && (tasks.size() > 0)){//verifies robot is not assigned task and there are tasks to assign
+                        if((!robots.get(i).hasTask) && (tasks.size() > 0)){//verifies robot is not assigned task and there are tasks to assign
                             for(int j = 0; j < tasks.size(); j++){
                                 if(tasks.get(j).assigned() < 2){
                                     int robotBid = robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(j).row, tasks.get(j).col);
@@ -52,14 +52,14 @@ public abstract class Visualizer1 implements ActionListener {
 
                     for(int place = 0; place < robots.size(); place++){ //will go through each task's preferred robot 1st,2nd, etc.
                         for(int i = 0; i < tasks.size(); i++){ //assigns robots their tasks
-                            if(robots.get(tasks.get(i).bidWinner(place)).hasTask == false && tasks.get(i).assigned() < 2){ //checks that bidwinner doesn't already have task
+                            if(!robots.get(tasks.get(i).bidWinner(place)).hasTask && tasks.get(i).assigned() < 2){ //checks that bidwinner doesn't already have task
                                 robots.get(tasks.get(i).bidWinner(place)).assignTask(tasks.get(i).id);//assigns task to robot
                                 tasks.get(i).addRobot();//assigns robot to task
                             }
                         }
                     }
 
-                    for(int i = 0; i < robots.size(); i++){ //goes through eat robot and calculates next point if not at the task
+                    for(int i = 0; i < robots.size(); i++){ //goes through each robot and calculates next point if not at the task
                         if((robots.get(i).hasTask)) {
                             if((robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(findTask(robots.get(i).task)).row, tasks.get(findTask(robots.get(i).task)).col) > 1)){
                                 int[] start = {robots.get(i).col, robots.get(i).row};
@@ -70,7 +70,7 @@ public abstract class Visualizer1 implements ActionListener {
                                 for (int j = 0; j < robots.size(); j++) {
                                     if (((shortest.get(1).x) == (robots.get(j).col)) && ((shortest.get(1).y) == (robots.get(j).row)) && (i != j)) {
                                         duplicate = true;
-                                        //do not do anything - robot must wait for robot to move
+                                        //do not do anything - robot must wait for other robot to move
                                     }
                                 }
                                 if (!duplicate) {
@@ -80,7 +80,7 @@ public abstract class Visualizer1 implements ActionListener {
                                 }
                             }
                             else if((robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(findTask(robots.get(i).task)).row, tasks.get(findTask(robots.get(i).task)).col) == 1)){
-                                //start doing task or keep doing task 1 robot
+                                //start doing task or keep doing task
 
                                 if(tasks.get(findTask(robots.get(i).task)).time > 0){
                                     int value = tasks.get(findTask(robots.get(i).task)).time - 1;
@@ -110,9 +110,9 @@ public abstract class Visualizer1 implements ActionListener {
         });
     }
     public static int[] generateInitialEnvironment(){//generates random positions
-        //don't do number repeats and positions should be between 0-99
+        //don't do number repeats and positions should be between 0-2500
         //return positions of those members for calculations later
-        //the first 5 numbers are the robots and the last four are the garbage
+        //the first 20 numbers are the robots and the rest are the garbage
         int robots = 20;
         int garbage = 40;
         int[] positions = new int[robots + garbage];
@@ -121,7 +121,7 @@ public abstract class Visualizer1 implements ActionListener {
         for(int i = 0; i < positions.length; i++) { //generates random positions
             boolean duplicate = false;
             do {
-                testValue = random.nextInt(((2500) - 1) - 0) + 0;
+                testValue = random.nextInt(((2500) - 1));
                 duplicate = false;
                 for (int j = 0; j < i; j++) {
                     if (positions[j] == testValue) {
@@ -165,11 +165,6 @@ public abstract class Visualizer1 implements ActionListener {
             task.setCol(column);
             tasks.add(task);
         }
-        return result;
-    }
-    public static int calculateBids(){ //stores robot bids and chooses
-        int result = 0;
-
         return result;
     }
 
