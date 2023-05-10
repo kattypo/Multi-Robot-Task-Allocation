@@ -69,7 +69,7 @@ public class Task implements Comparable<Task>{
     }
 
     @Override public int compareTo(Task compareWinner) { //do not touch handles sorting tasks by their best bid
-        int compareNum = ((Task)compareWinner).bestMatchValue;
+        int compareNum = compareWinner.bestMatchValue;
         return this.bestMatchValue - compareNum;
     }
 
