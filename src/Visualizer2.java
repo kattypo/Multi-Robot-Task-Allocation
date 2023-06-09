@@ -15,14 +15,15 @@ public abstract class Visualizer2 implements ActionListener {
     static JPanel bottom = new JPanel();//displays grid
     static JPanel top = new JPanel();//displays button
     static int idAssigner = 0; //gives each task a unique id
+    static char[][] initialGrid;
 
     public static void demo(){
 
         int cycles = 1; //amount of cycles to demo for
-        PathGenerator path = new PathGenerator();
+        AStarPathGenerator path = new AStarPathGenerator();//added
         JButton button = new JButton("Progress 1 step");
         int[] initialPositions = generateInitialEnvironment();
-        char[][] initialGrid = generateGrid(initialPositions);
+        initialGrid = generateGrid(initialPositions);
         displayGrid(initialGrid, grid, button);
         for(int j = 0; j < tasks.size(); j++) {
             tasks.get(j).setId(idAssigner);
@@ -66,18 +67,19 @@ public abstract class Visualizer2 implements ActionListener {
                             if((robots.get(i).calculateBid(robots.get(i).row, robots.get(i).col, tasks.get(findTask(robots.get(i).task)).row, tasks.get(findTask(robots.get(i).task)).col) > 1)){
                                 int[] start = {robots.get(i).col, robots.get(i).row};
                                 int[] end = {tasks.get(findTask(robots.get(i).task)).col, tasks.get(findTask(robots.get(i).task)).row};
-                                LinkedList<PathGenerator.Cell> shortest = new LinkedList<>(); //will store the shortest path
-                                shortest = path.shortestPath(initialGrid, start, end); //returns the shortest path to the goal
+                                LinkedList<AStarPathGenerator.Cell> shortest = new LinkedList<>(); //will store the shortest path
+                                shortest = path.aStarSearch(initialGrid, start, end); //returns the shortest path to the goal
                                 duplicate = false;
                                 for (int j = 0; j < robots.size(); j++) {
-                                    if (((shortest.get(1).x) == (robots.get(j).col)) && ((shortest.get(1).y) == (robots.get(j).row)) && (i != j)) {
+                                    if (((shortest.get(1).col) == (robots.get(j).col)) && ((shortest.get(1).row) == (robots.get(j).row)) && (i != j)) {
                                         duplicate = true;
                                         //do not do anything - robot must wait for robot to move
+                                        //may be a robot just passing or a robot may already be at the task blocking the robot's way
                                     }
                                 }
                                 if (!duplicate) {
-                                    robots.get(i).setCol(shortest.get(1).x); //sets the new row for the robot
-                                    robots.get(i).setRow(shortest.get(1).y); //sets the new col for the robot
+                                    robots.get(i).setCol(shortest.get(1).col); //sets the new row for the robot
+                                    robots.get(i).setRow(shortest.get(1).row); //sets the new col for the robot
 
                                 }
                             }
@@ -107,7 +109,7 @@ public abstract class Visualizer2 implements ActionListener {
                     }
                     cyclesCounter += 1;
                 }
-                updateGrid();
+                initialGrid = updateGrid();
             }
         });
     }
@@ -220,7 +222,7 @@ public abstract class Visualizer2 implements ActionListener {
         grid.setVisible(true);
     }
 
-    public static void updateGrid(){
+    public static char[][] updateGrid(){
         JLabel[][] cells;
         cells = new JLabel[50][50];
         char[][] result = new char[50][50]; //creates environment for display
@@ -262,6 +264,7 @@ public abstract class Visualizer2 implements ActionListener {
 
         bottom.revalidate();
         bottom.repaint();
+        return result;
     }
     static void resetCounter(){//for use with button, selection will reset the counter
         cyclesCounter = 0;
