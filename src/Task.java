@@ -5,13 +5,10 @@ public class Task implements Comparable<Task>{
     int robots = 0; //current robots assigned to the task
     int row;
     int col;
-
     ArrayList<Bid> bids = new ArrayList<>(); //will be used to store bids
     int bestMatch;
     int bestMatchValue;
-
     int time = 2;
-
     int id;
 
 
@@ -32,8 +29,7 @@ public class Task implements Comparable<Task>{
         bids.add(bid);
     }
 
-    void sortBids()
-    {
+    void sortBids(){
         Collections.sort(bids); //sorts the bids by value increasing
         setBestMatch(bids.get(0).id); //assigns best match for sorting later
         setBestMatchValue(bids.get(0).number); //assigns best match value for sorting later
@@ -50,11 +46,9 @@ public class Task implements Comparable<Task>{
         return winner;
     }
     void setRow(int y){
-
         row = y;
     }
     void setCol(int x){
-
         col = x;
     }
     void setTime(int value){
@@ -73,8 +67,7 @@ public class Task implements Comparable<Task>{
         return this.bestMatchValue - compareNum;
     }
 
-    void setId(int value)
-    {
+    void setId(int value){
         id = value;
     }
 
