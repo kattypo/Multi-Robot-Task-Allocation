@@ -14,7 +14,6 @@ public class Robot {
     }
 
     void assignTask(int taskId){ //robot has task
-
         hasTask = true;
         task = taskId;
     }
@@ -24,15 +23,12 @@ public class Robot {
         }
     }
     void setRow(int y){
-
         row = y;
     }
     void setCol(int x){
-
         col = x;
     }
     void setID(int ID){
-
         id = ID;
     }
 }
