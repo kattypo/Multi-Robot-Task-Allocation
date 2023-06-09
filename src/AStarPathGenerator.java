@@ -22,11 +22,9 @@ public class AStarPathGenerator {
             return (int) Math.round(this.f) - compareNum;
         }
     }
-    boolean isValid(char[][] grid, int row, int col, int[] dest) //checks if our cell (col, row) is valid
-    {
+    boolean isValid(char[][] grid, int row, int col, int[] dest){ //checks if our cell (col, row) is valid
         int rows = grid.length;
         int cols = grid[0].length;
-
         if (row >= 0 && col >= 0 && row < rows && col < cols){
             if(grid[row][col] == '-' || (row == dest[1] && col == dest[0] && grid[row][col] == 'G')){
                 return true;
@@ -34,52 +32,50 @@ public class AStarPathGenerator {
         }
         return false;
     }
-    boolean isUnBlocked(char[][] grid, int[] current) //checks if goal is accessible
-    {
+    boolean isUnBlocked(char[][] grid, int[] current){ //checks if goal is accessible
         int rows = grid.length;
         int cols = grid[0].length;
-
-            if(current[0] > 0){ //checks left
-                if(grid[current[0] - 1][current[1]] == '-'){
-                    return true;
-                }
+        if(current[0] > 0){ //checks left
+            if(grid[current[0] - 1][current[1]] == '-'){
+                return true;
             }
-            if(current[0] < cols - 1){ //checks right
-                if(grid[current[0] + 1][current[1]] == '-'){
-                    return true;
-                }
+        }
+        if(current[0] < cols - 1){ //checks right
+            if(grid[current[0] + 1][current[1]] == '-'){
+                return true;
             }
-            if(current[1] > 0){ //checks up
-                if(grid[current[0]][current[1] - 1] == '-'){
-                    return true;
-                }
+        }
+        if(current[1] > 0){ //checks up
+            if(grid[current[0]][current[1] - 1] == '-'){
+                return true;
             }
-            if(current[1] < rows - 1){ //checks down
-                if(grid[current[0]][current[1] + 1] == '-'){
-                    return true;
-                }
+        }
+        if(current[1] < rows - 1){ //checks down
+            if(grid[current[0]][current[1] + 1] == '-'){
+                return true;
             }
-            if(current[0] > 0 && current[1] > 0){ //checks diagonal up and to the left
-                if(grid[current[0] - 1][current[1] - 1] == '-'){
-                    return true;
-                }
+        }
+        if(current[0] > 0 && current[1] > 0){ //checks diagonal up and to the left
+            if(grid[current[0] - 1][current[1] - 1] == '-'){
+                return true;
             }
-            if(current[0] < cols - 1 && current[1] > 0){ //checks diagonal up and to the right
-                if(grid[current[0] + 1][current[1] - 1] == '-'){
-                    return true;
-                }
+        }
+        if(current[0] < cols - 1 && current[1] > 0){ //checks diagonal up and to the right
+            if(grid[current[0] + 1][current[1] - 1] == '-'){
+                return true;
             }
-            if(current[0] > 0 && current[1] < rows - 1){ //checks diagonal down and to the left
-                if(grid[current[0] - 1][current[1] + 1] == '-'){
-                    return true;
-                }
+        }
+        if(current[0] > 0 && current[1] < rows - 1){ //checks diagonal down and to the left
+            if(grid[current[0] - 1][current[1] + 1] == '-'){
+                return true;
             }
-            if(current[0] < cols - 1 && current[1] < rows - 1){ //checks diagonal down and to the right
-                if(grid[current[0] + 1][current[1] + 1] == '-'){
-                    return true;
-                }
+        }
+        if(current[0] < cols - 1 && current[1] < rows - 1){ //checks diagonal down and to the right
+            if(grid[current[0] + 1][current[1] + 1] == '-'){
+                return true;
             }
-            return false;
+        }
+        return false;
     }
     boolean isDestination(int[] position, int[] dest){ //checks if we are at the destination
         if((position[0] == dest[0]) && (position[1] == dest[1])){
@@ -121,8 +117,7 @@ public class AStarPathGenerator {
 
         return path;
     }
-    LinkedList<Cell> aStarSearch(char[][] grid, int[] start, int[] dest)//A* Search algorithm to find the shortest path
-    {
+    LinkedList<Cell> aStarSearch(char[][] grid, int[] start, int[] dest){ //A* Search algorithm to find the shortest path
         int i, j;
         int rows = grid.length;
         int cols = grid[0].length;
