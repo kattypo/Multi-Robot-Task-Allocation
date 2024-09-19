@@ -109,32 +109,31 @@ public abstract class Visualizer1 implements ActionListener {
             }
         });
     }
-    public static int[] generateInitialEnvironment(){//generates random positions
-        //don't do number repeats and positions should be between 0-2500
-        //return positions of those members for calculations later
-        //the first 20 numbers are the robots and the rest are the garbage
-        int robots = 20;
-        int garbage = 40;
-        int[] positions = new int[robots + garbage];
-        int testValue;
+    public static int[] generateInitialEnvironment(){ //generates random positions
+        //positions should be between 0-2499 inclusive
+        //first 20 numbers are the robots' initial positions and the rest are garbage positions
+
+        final int robots = 20;
+        final int garbage = 40;
+        final int maxValue = 2499;
+        final int totalPositions = robots + garbage;
+        Set<Integer> uniquePositions = new HashSet<>();
         Random random = new Random();
-        for(int i = 0; i < positions.length; i++) { //generates random positions
-            boolean duplicate = false;
-            do {
-                testValue = random.nextInt(((2500) - 1));
-                duplicate = false;
-                for (int j = 0; j < i; j++) {
-                    if (positions[j] == testValue) {
-                        duplicate = true;
-                        break;
-                    }
-                }
-            }
-            while (duplicate);
-            positions[i] = testValue;
+
+        while (uniquePositions.size() < totalPositions) {
+            int testValue = random.nextInt(maxValue);
+            uniquePositions.add(testValue);
+        }
+        int iterator = 0;
+        int[] positions = new int[totalPositions];
+        
+        for(Integer position: uniquePositions){
+            positions[iterator] = position.intValue();
+            iterator += 1;
         }
         return positions;
     }
+
     public static char[][] generateGrid(int[] positions) //creates grid
     {
         char[][] result = new char[50][50]; //creates environment for display
